@@ -1,35 +1,58 @@
-// import { useState } from 'react'
-// import reactLogo from './assets/react.svg'
-// import viteLogo from '/vite.svg'
-// import './App.css'
+import { useState, useEffect } from "react";
+import type { Todo, SelectedGroup, ModalState } from "./types";
+import { fetchTodos, createTodo, updateTodo, deleteTodo } from "./api";
 
-// function App() {
-//   const [count, setCount] = useState(0)
+function App() {
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [selectedGroup, setSelectedGroup] = useState<SelectedGroup>({
+    type: "all",
+  });
+  const [modalState, setModalState] = useState<ModalState>({ open: false });
 
-//   return (
-//     <>
-//       <div>
-//         <a href="https://vite.dev" target="_blank">
-//           <img src={viteLogo} className="logo" alt="Vite logo" />
-//         </a>
-//         <a href="https://react.dev" target="_blank">
-//           <img src={reactLogo} className="logo react" alt="React logo" />
-//         </a>
-//       </div>
-//       <h1>Vite + React</h1>
-//       <div className="card">
-//         <button onClick={() => setCount((count) => count + 1)}>
-//           count is {count}
-//         </button>
-//         <p>
-//           Edit <code>src/App.tsx</code> and save to test HMR
-//         </p>
-//       </div>
-//       <p className="read-the-docs">
-//         Click on the Vite and React logos to learn more
-//       </p>
-//     </>
-//   )
-// }
+  useEffect(() => {
+    fetchTodos().then(setTodos);
+  }, []);
 
-// export default App
+  const handleSelectGroup = (group: SelectedGroup) => {
+    setSelectedGroup(group);
+  };
+
+  const handleOpenModal = (todo: Todo | null) => {
+    setModalState({ open: true, todo });
+  };
+
+  const handleCloseModal = () => {
+    setModalState({ open: false });
+  };
+
+  const handleToggle = async (id: number) => {
+    const todo = todos.find((t) => t.id === id)!;
+    const updated = await updateTodo(id, { completed: !todo.completed });
+    setTodos(todos.map((t) => (t.id === id ? updated : t)));
+  };
+
+  const handleDelete = async (id: number) => {
+    await deleteTodo(id);
+    setTodos(todos.filter((t) => t.id !== id));
+  };
+
+  const handleSave = async (data: Omit<Todo, "id">, id?: number) => {
+    if (id !== undefined) {
+      const updated = await updateTodo(id, data);
+      setTodos(todos.map((t) => (t.id === id ? updated : t)));
+    } else {
+      const created = await createTodo(data);
+      setTodos([...todos, created]);
+      setSelectedGroup({ type: "all" });
+    }
+    setModalState({ open: false });
+  };
+
+  return (
+    <div>
+      <p>Todos loaded: {todos.length}</p>
+    </div>
+  );
+}
+
+export default App;
