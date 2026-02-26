@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import type { Todo, SelectedGroup, ModalState } from "./types";
 import { fetchTodos, createTodo, updateTodo, deleteTodo } from "./api";
+import Sidebar from "./Sidebar";
 
 function App() {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -65,9 +66,17 @@ function App() {
   };
 
   return (
-    <div>
-      <p>Todos loaded: {todos.length}</p>
-    </div>
+    <>
+      <input type="checkbox" id="sidebar_toggle" />
+      <Sidebar
+        todos={todos}
+        selectedGroup={selectedGroup}
+        onSelectGroup={handleSelectGroup}
+      />
+      <div>
+        <p>Todos loaded: {todos.length}</p>
+      </div>
+    </>
   );
 }
 
