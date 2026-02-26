@@ -35,7 +35,7 @@ export async function updateTodo(
 
   if (!res.ok) {
     throw new Error(
-      `Failed to update todo with ID ${id}. Status ${res.status}`,
+      `Failed to update todo with ID ${id}. Status: ${res.status}`,
     );
   }
   return res.json();
@@ -46,7 +46,7 @@ export async function deleteTodo(id: number): Promise<void> {
 
   if (!res.ok) {
     throw new Error(
-      `Failed to delete todo with ID ${id}. Staus: ${res.status}`,
+      `Failed to delete todo with ID ${id}. Status: ${res.status}`,
     );
   }
 }
