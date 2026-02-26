@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import type { Todo, SelectedGroup, ModalState } from "./types";
 import { fetchTodos, createTodo, updateTodo, deleteTodo } from "./api";
 import Sidebar from "./Sidebar";
+import Main from "./MainArea";
 
 function App() {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -73,9 +74,13 @@ function App() {
         selectedGroup={selectedGroup}
         onSelectGroup={handleSelectGroup}
       />
-      <div>
-        <p>Todos loaded: {todos.length}</p>
-      </div>
+      <Main
+        todos={todos}
+        selectedGroup={selectedGroup}
+        onOpenModal={handleOpenModal}
+        onToggle={handleToggle}
+        onDelete={handleDelete}
+      />
     </>
   );
 }
