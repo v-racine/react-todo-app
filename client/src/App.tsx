@@ -10,7 +10,7 @@ function App() {
   const [modalState, setModalState] = useState<ModalState>({ open: false });
 
   useEffect(() => {
-    fetchTodos().then(setTodos);
+    fetchTodos().then(setTodos).catch(console.error);
   }, []);
 
   const handleSelectGroup = (group: SelectedGroup) => {
@@ -26,26 +26,42 @@ function App() {
   };
 
   const handleToggle = async (id: number) => {
-    const todo = todos.find((t) => t.id === id)!;
-    const updated = await updateTodo(id, { completed: !todo.completed });
-    setTodos(todos.map((t) => (t.id === id ? updated : t)));
+    const todo = todos.find((t) => t.id === id);
+    if (!todo) {
+      console.error(`Todo with id ${id} not found`);
+      return;
+    }
+    try {
+      const updated = await updateTodo(id, { completed: !todo.completed });
+      setTodos(todos.map((t) => (t.id === id ? updated : t)));
+    } catch (error) {
+      console.error("Failed to toggle todo:", error);
+    }
   };
 
   const handleDelete = async (id: number) => {
-    await deleteTodo(id);
-    setTodos(todos.filter((t) => t.id !== id));
+    try {
+      await deleteTodo(id);
+      setTodos(todos.filter((t) => t.id !== id));
+    } catch (error) {
+      console.error("Failed to delete todo:", error);
+    }
   };
 
   const handleSave = async (data: Omit<Todo, "id">, id?: number) => {
-    if (id !== undefined) {
-      const updated = await updateTodo(id, data);
-      setTodos(todos.map((t) => (t.id === id ? updated : t)));
-    } else {
-      const created = await createTodo(data);
-      setTodos([...todos, created]);
-      setSelectedGroup({ type: "all" });
+    try {
+      if (id !== undefined) {
+        const updated = await updateTodo(id, data);
+        setTodos(todos.map((t) => (t.id === id ? updated : t)));
+      } else {
+        const created = await createTodo(data);
+        setTodos([...todos, created]);
+        setSelectedGroup({ type: "all" });
+      }
+      setModalState({ open: false });
+    } catch (error) {
+      console.error("Failed to save todo:", error);
     }
-    setModalState({ open: false });
   };
 
   return (
