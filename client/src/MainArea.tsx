@@ -27,9 +27,7 @@ export default function Main({
           <img src="/images/hamburger.png" alt="Toggle Sidebar" />
         </label>
         <dl>
-          <dt>
-            <time>{title}</time>
-          </dt>
+          <dt>{title}</dt>
           <dd>{filtered.length}</dd>
         </dl>
       </header>
@@ -38,7 +36,7 @@ export default function Main({
           <img src="/images/plus.png" alt="Add Todo Item" />
           <h2>Add new to do</h2>
         </label>
-        <table cellSpacing="0">
+        <table style={{ borderSpacing: 0 }}>
           <tbody>
             {filtered.map((todo) => (
               <TodoItem

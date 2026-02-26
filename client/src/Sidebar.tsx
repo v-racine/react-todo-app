@@ -38,9 +38,7 @@ export default function Sidebar({
               }
               onClick={() => onSelectGroup({ type: "all_date", date })}
             >
-              <dt>
-                <time>{date}</time>
-              </dt>
+              <dt>{date}</dt>
               <dd>{items.length}</dd>
             </dl>
           ))}
@@ -73,9 +71,7 @@ export default function Sidebar({
               }
               onClick={() => onSelectGroup({ type: "completed_date", date })}
             >
-              <dt>
-                <time>{date}</time>
-              </dt>
+              <dt>{date}</dt>
               <dd>{items.length}</dd>
             </dl>
           ))}

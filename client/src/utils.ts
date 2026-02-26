@@ -29,20 +29,28 @@ export function getGroupTitle(group: SelectedGroup): string {
 }
 
 export function getFilteredTodos(todos: Todo[], group: SelectedGroup): Todo[] {
-  const filtered = (() => {
-    switch (group.type) {
-      case "all":
-        return todos;
-      case "all_date":
-        return todos.filter((t) => getTodoKey(t) === group.date);
-      case "completed":
-        return todos.filter((t) => t.completed);
-      case "completed_date":
-        return todos.filter((t) => t.completed && getTodoKey(t) === group.date);
-    }
-  })();
+  let filteredTodos: Todo[];
+  switch (group.type) {
+    case "all":
+      filteredTodos = todos;
+      break;
+    case "all_date":
+      filteredTodos = todos.filter((t) => getTodoKey(t) === group.date);
+      break;
+    case "completed":
+      filteredTodos = todos.filter((t) => t.completed);
+      break;
+    case "completed_date":
+      filteredTodos = todos.filter(
+        (t) => t.completed && getTodoKey(t) === group.date,
+      );
+      break;
+    default:
+      filteredTodos = [];
+  }
+
   return [
-    ...filtered.filter((t) => !t.completed),
-    ...filtered.filter((t) => t.completed),
+    ...filteredTodos.filter((t) => !t.completed),
+    ...filteredTodos.filter((t) => t.completed),
   ];
 }
