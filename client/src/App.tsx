@@ -3,6 +3,7 @@ import type { Todo, SelectedGroup, ModalState } from "./types";
 import { fetchTodos, createTodo, updateTodo, deleteTodo } from "./api";
 import Sidebar from "./Sidebar";
 import Main from "./MainArea";
+import Modal from "./Modal";
 
 function App() {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -81,6 +82,13 @@ function App() {
         onToggle={handleToggle}
         onDelete={handleDelete}
       />
+      {modalState.open && (
+        <Modal
+          todo={modalState.todo}
+          onSave={handleSave}
+          onClose={handleCloseModal}
+        />
+      )}
     </>
   );
 }
