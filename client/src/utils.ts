@@ -5,8 +5,13 @@ export function getTodoKey(todo: Todo): string {
 }
 
 export function groupByDate(todos: Todo[]): Record<string, Todo[]> {
-  return todos.reduce<Record<string, Todo[]>>((groups, todo) => {
+  const result: Record<string, Todo[]> = {};
+  for (const todo of todos) {
     const key = getTodoKey(todo);
-    return { ...groups, [key]: [...(groups[key] ?? []), todo] };
-  }, {});
+    if (!result[key]) {
+      result[key] = [];
+    }
+    result[key].push(todo);
+  }
+  return result;
 }
