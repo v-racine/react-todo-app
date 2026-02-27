@@ -67,7 +67,7 @@ export default function Modal({ todo, onSave, onClose }: Props) {
       <div
         className="modal"
         id="modal_layer"
-        style={{ display: "block" }}
+        // style={{ display: "block" }}
         onClick={onClose}
       />
       <div className="modal" id="form_modal" style={{ display: "block" }}>
